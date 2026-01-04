@@ -100,6 +100,7 @@ class AKGChat:
             style=self.input_style,
             key_bindings=self.kb,
             multiline=True,
+            erase_when_done=True,  # 设置为 True，避免 prompt_toolkit 在退出时自动打印用户输入
         )
 
     def _load_env_file(self) -> None:
@@ -190,6 +191,8 @@ class AKGChat:
             if not self.handle_command_ui(text):
                 self.exit_requested = True
             return
+        # 由于设置了 erase_when_done=True，prompt_toolkit 不会自动打印用户输入
+        # 所以我们直接渲染格式化的用户消息即可
         if self.session.app.is_running:
             await self.emit_in_terminal(self.render_user_message(text))
         else:
@@ -266,6 +269,8 @@ class AKGChat:
                     if self.exit_requested:
                         return
                 try:
+                    # 由于设置了 erase_when_done=True，prompt_async 返回时不会自动打印用户输入
+                    # 而是会清除输入区域，这样我们就可以完全控制用户消息的渲染
                     text = await self.session.prompt_async(
                         self.render_panel_prompt,
                         prompt_continuation=lambda width, line_number, is_soft_wrap: HTML("<promptcontinuation> </promptcontinuation>"),
