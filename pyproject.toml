@@ -1,0 +1,17 @@
+[project]
+name = "akg-cli"
+version = "0.1.0"
+description = "基于 prompt_toolkit + rich 的 DeepSeek 聊天 CLI 工具"
+requires-python = ">=3.8"
+dependencies = [
+    "prompt_toolkit>=3.0.0",
+    "rich>=13.0.0",
+    "httpx>=0.24.0",
+]
+
+[project.scripts]
+akg-cli = "akg_cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
